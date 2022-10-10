@@ -1,5 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import * as L from 'leaflet';
+import { MapaIpasService } from 'src/app/services/mapa-ipas.service';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+  AbstractControl,
+  ValidationErrors
+} from "@angular/forms";
 
 @Component({
   selector: 'app-mapa',
@@ -20,16 +29,49 @@ export class MapaComponent implements OnInit   {
   private layerControl;
   private marcador;  
 
-  marcadorposicion:any = [];
   
-  constructor() { }
+  
+  constructor(
+    private formBuilder: FormBuilder,
+    private serviceMapaIpas: MapaIpasService
+  ) { }
+
+  marcadorposicion:any = [];
+  departamentos: any[] = [];
+
+  formSearch = this.formBuilder.group(
+    {
+      idDepartamento: [null],
+      idIpa: [null], 
+      idEstadoApoyoAdmin: [null],
+    }
+  );
 
   ngOnInit(): void {
+    this.listaDepartamentos();
   }
   
   ionViewDidEnter(){
     this.initMap();
-}
+  }
+
+  listaDepartamentos(): void {
+    this.serviceMapaIpas.listaDepartamentos().subscribe(data => {
+      this.departamentos = data;
+    }); 
+  }
+
+  listarIPAS(): void {
+
+    let dataIN: any[] = [];
+    dataIN['depa'] = this.formSearch.value.idDepartamento;
+
+
+    this.serviceMapaIpas.listaIPAS(dataIN).subscribe(data => {
+      console.log(data);
+    }); 
+  }
+
 
   private initMap(): void {
     this.USGS_USImageryTopo = L.tileLayer('https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryTopo/MapServer/tile/{z}/{y}/{x}', {
@@ -107,7 +149,7 @@ export class MapaComponent implements OnInit   {
 
 
     var marker = new L.marker([-12.064137562030421, -77.03555666235727])
-    .bindPopup('<button type="button" (click)="myFunction()">Click Me!</button>')
+    .bindPopup('info de la obra')
     .setIcon(this.marcador)
     .on('click',function(ev) { ev.target.openPopup();})
     .on('mouseover', function(ev) { ev.target.openPopup(); });
@@ -117,19 +159,5 @@ export class MapaComponent implements OnInit   {
       this.map.addLayer(this.marcadorposicion[i]);
     }
   }  
-
-  isModalOpen = false;
-  message='';
-
-  setOpen(isOpen: boolean) {
-    console.log('setOpen');
-    this.isModalOpen = isOpen;
-    this.message = 'sdfsdfsdfsdf';
-  }
-
-  myFunction(): void {
-    console.log('myFunction');
-
-  }
 
 }
