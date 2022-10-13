@@ -42,6 +42,7 @@ export class MapaComponent implements OnInit   {
     {
       idDepartamento: [null],
       idIpa: [null], 
+      txt_search: [null], 
     }
   );
 
@@ -60,7 +61,6 @@ export class MapaComponent implements OnInit   {
   }
 
   listarIPAS(): void {
-
     let depa = this.formSearch.value.idDepartamento;
     let formData = new FormData;
     formData.append('depa',depa);
@@ -68,7 +68,6 @@ export class MapaComponent implements OnInit   {
       this.dpas = data;
     }); 
   }
-
 
   private initMap(): void {
     this.USGS_USImageryTopo = L.tileLayer('https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryTopo/MapServer/tile/{z}/{y}/{x}', {
@@ -156,5 +155,15 @@ export class MapaComponent implements OnInit   {
       this.map.addLayer(this.marcadorposicion[i]);
     }
   }  
+
+  buscar(): void {
+    let data = this.formSearch.value;
+    console.log('buscar');
+    console.log(data);
+  }
+
+  limpiar(): void {
+    console.log('limpiar');
+  }
 
 }

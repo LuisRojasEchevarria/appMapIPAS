@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
@@ -6,9 +7,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class MapaIpasService {
 
-  // url = `https://intranet2.fondepes.gob.pe/mapaexterno/serviciomapaexterno`;
-  // url = `https://172.20.95.116/mapaexterno/serviciomapaexterno`;
-  url = `http://localhost/mapaexterno/serviciomapaexterno`;
+  url = `${environment.HOST_URL}/serviciomapaexterno`;
   
   constructor(private http: HttpClient) { }
 

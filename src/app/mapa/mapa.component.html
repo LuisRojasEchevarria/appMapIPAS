@@ -14,97 +14,47 @@
   </ion-header>
 
   <form [formGroup]="formSearch" (ngSubmit)="buscar()">
-    <div class="form-row mb-2">
-      <div class="col-md-3">
+    <ion-list>
+      <ion-item>
+        <ion-label position="floating">DPTO</ion-label>
         <ion-select interface="popover" placeholder="DPTO" formControlName="idDepartamento" (ionChange)="listarIPAS();">
           <ion-select-option *ngFor="let item of departamentos" [value]="item.Dpto_Id">
             {{ item.Dpto_Nombre }}
           </ion-select-option>
         </ion-select>
-      </div>
-      <div class="col-md-3">
+      </ion-item>    
+      <ion-item>
+        <ion-label position="floating">DPA</ion-label>
         <ion-select interface="popover" placeholder="DPA" formControlName="idIpa">
           <ion-select-option *ngFor="let item of dpas" [value]="item.Infra_Id">
             {{ item.NOM }}
           </ion-select-option>
         </ion-select>
-      </div>
-      <!-- <div class="col-md-3">
-        <label class="col-form-label-sm">Estado: </label>
-        <ng-select [searchable]="true" #selectEstadoApoyoAdmin (close)="selectEstadoApoyoAdmin.blur()"
-        notFoundText="No se encontraron resultados"  
-        placeholder="Seleccione" formControlName="idEstadoApoyoAdmin">
-          <ng-option *ngFor="let item of estadoApoyoAdmines" [value]="item.id">
-            {{ item.nombre }}
-          </ng-option>
-        </ng-select>
-      </div>
-      <div class="col-md-3">
-        <label class="col-form-label-sm">Nro. Expediente SGD: </label>
-        <input type="text" class="form-control form-control-sm" maxlength="20" upperCase appSoloNumerosSGD 
-          formControlName="numeroExpedienteSGD" name="numeroExpedienteSGD" placeholder="Nro. Expediente SGD">
-      </div>       -->
-    </div>
-    <div class="form-row mb-2">
-      <div class="col-auto">
-        <button class="btn btn-primary btn-sm" title="Buscar">
-          Buscar &nbsp;<i class="fa fa-search"></i>
-        </button>
-      </div>
-      <!--<div class="col-auto">
-        <button type="button" [disabled]="loading" class="btn btn-success btn-sm" (click)="exportar()" title="Excel">
-          Exportar &nbsp;<i class="fa fa-file-excel-o" aria-hidden="true"></i>
-        </button>
-      </div>-->
-      <div class="col-auto">
-        <button class="btn btn-warning btn-sm" (click)="limpiar()" type="button" style="color: white;" title="Limpiar">
-          Limpiar &nbsp;<i class="fa fa-eraser" aria-hidden="true"></i>
-        </button>
-      </div>
-    </div>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Texto</ion-label>
+        <ion-input type="text" formControlName="txt_search" placeholder="Ingrese texto..." maxlength="20"></ion-input>
+      </ion-item>
+      <ion-item>
+        <!-- <ion-label position="floating">DPTO</ion-label> -->
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <ion-button type="submit" color="success" expand="block">
+                Buscar<ion-icon slot="end" name="search-outline"></ion-icon>
+              </ion-button>              
+            </ion-col>
+            <ion-col>
+              <ion-button type="button" color="warning" expand="block" (click)="limpiar()">
+                Limpiar<ion-icon slot="end" name="trash-outline"></ion-icon>
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </ion-list>
   </form>
 
-  <ul style="list-style-type: none; margin: 0; padding: 0; overflow: hidden; border: 1px solid #e7e7e7; background-color: #f3f3f3; position: relative; width: 100%;">
-    <li style="float: left">
-        <a style="display: block; color: #666; text-align: center; padding: 14px 16px; text-decoration: none;">
-            <label class="control-label">DPTO: </label>
-            <select id="filtro_depa" name="filtro_depa" style="width: 200px;">
-          </select>
-        </a>
-
-
-
-
-
-    </li>
-    <li style="float: left">
-        <a style="display: block; color: #666; text-align: center; padding: 14px 16px; text-decoration: none;">
-            <label class="control-label">DPA: </label>
-            <select id="filtro_tipo" name="filtro_tipo" style="width: 200px;">
-          </select>
-        </a>
-    </li>
-    <li style="float: left">
-        <a style="display: block; color: #666; text-align: center; padding: 14px 16px; text-decoration: none;">
-            <!-- <label class="control-label">TIPO: </label> -->
-            <input id="filtro_nombre" name="filtro_nombre" type="text" class="form-control" placeholder="Buscar..." value="">
-        </a>
-    </li>
-    <li style="float: left">
-        <a style="display: block; color: #666; text-align: center; padding: 14px 16px; text-decoration: none;">
-            <button style="margin-top:0px; padding-top: 5px; padding-bottom: 5px; background-color: #49b6bb; border-color: #49b6bb;" id="btn_filtrar_mapa" type="button" class="btn btn-warning btn-lg">
-                <i class="glyphicon glyphicon-search"></i> Buscar
-            </button>
-        </a>
-    </li>
-    <li style="float: left">
-        <a style="display: block; color: #666; text-align: center; padding: 14px 16px; text-decoration: none;">
-            <button style="margin-top:0px; padding-top: 5px; padding-bottom: 5px;" id="btn_limpiarfiltro_mapa" type="button" class="btn btn-warning btn-lg">
-                Limpiar
-            </button>
-        </a>
-    </li>
-</ul>
   <div class="map-container">
     <div class="map-frame">
       <div id="map"></div>
