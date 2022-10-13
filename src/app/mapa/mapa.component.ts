@@ -29,8 +29,6 @@ export class MapaComponent implements OnInit   {
   private layerControl;
   private marcador;  
 
-  
-  
   constructor(
     private formBuilder: FormBuilder,
     private serviceMapaIpas: MapaIpasService
