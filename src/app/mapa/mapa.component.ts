@@ -36,12 +36,12 @@ export class MapaComponent implements OnInit   {
 
   marcadorposicion:any = [];
   departamentos: any[] = [];
+  dpas: any[] = [];
 
   formSearch = this.formBuilder.group(
     {
       idDepartamento: [null],
       idIpa: [null], 
-      idEstadoApoyoAdmin: [null],
     }
   );
 
@@ -61,12 +61,11 @@ export class MapaComponent implements OnInit   {
 
   listarIPAS(): void {
 
-    let dataIN: any[] = [];
-    dataIN['depa'] = this.formSearch.value.idDepartamento;
-
-
-    this.serviceMapaIpas.listaIPAS(dataIN).subscribe(data => {
-      console.log(data);
+    let depa = this.formSearch.value.idDepartamento;
+    let formData = new FormData;
+    formData.append('depa',depa);
+    this.serviceMapaIpas.listaIPAS(formData).subscribe(data => {
+      this.dpas = data;
     }); 
   }
 

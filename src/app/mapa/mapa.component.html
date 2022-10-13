@@ -24,6 +24,9 @@
       </div>
       <div class="col-md-3">
         <ion-select interface="popover" placeholder="DPA" formControlName="idIpa">
+          <ion-select-option *ngFor="let item of dpas" [value]="item.Infra_Id">
+            {{ item.NOM }}
+          </ion-select-option>
         </ion-select>
       </div>
       <!-- <div class="col-md-3">
