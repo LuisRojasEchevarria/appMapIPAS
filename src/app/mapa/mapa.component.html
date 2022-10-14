@@ -6,15 +6,15 @@
   </ion-toolbar>
 </ion-header>
 <ion-content [fullscreen]="true">
-  <ion-accordion-group>
-    <ion-accordion value="first">
+  <ion-accordion-group class="fondofiltro">
+    <ion-accordion value="first" class="fondofiltro">
       <ion-item slot="header" color="light">
-        <ion-label>Filtro</ion-label>
+        <ion-label>Filtrar Desembarcaderos</ion-label>
       </ion-item>
-      <div class="ion-padding" slot="content">
+      <div class="ion-padding fondofiltro" slot="content">
         <form [formGroup]="formSearch" (ngSubmit)="buscar()">
-          <ion-list>
-            <ion-item>
+          <ion-list class="fondofiltro">
+            <ion-item class="fondofiltro">
               <ion-label position="floating">Departamento</ion-label>
               <ion-select interface="popover" placeholder="" formControlName="idDepartamento" (ionChange)="listarIPAS();">
                 <ion-select-option *ngFor="let item of departamentos" [value]="item.Dpto_Id">
@@ -22,7 +22,7 @@
                 </ion-select-option>
               </ion-select>
             </ion-item>    
-            <ion-item>
+            <ion-item class="fondofiltro">
               <ion-label position="floating">Desembarcadero</ion-label>
               <ion-select interface="popover" placeholder="" formControlName="idIpa">
                 <ion-select-option *ngFor="let item of dpas" [value]="item.Infra_Id">
@@ -30,11 +30,11 @@
                 </ion-select-option>
               </ion-select>
             </ion-item>
-            <ion-item>
+            <ion-item class="fondofiltro">
               <ion-label position="floating">Nombre del Desembarcadero</ion-label>
               <ion-input type="text" formControlName="nomIpa" placeholder="Ingrese nombre..." maxlength="20"></ion-input>
             </ion-item>
-            <ion-item>
+            <ion-item class="fondofiltro">
               <ion-grid>
                 <ion-row>
                   <ion-col>

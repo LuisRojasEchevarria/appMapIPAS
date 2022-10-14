@@ -167,19 +167,17 @@ export class MapaComponent implements OnInit   {
     this.layerControl.addBaseLayer(this.osm, "OpenStreetMap");
 
     L.geoJson(REGIONES).addTo(this.map);
-    document.querySelector(".leaflet-interactive").setAttribute('stroke','#ffffff');
-    document.querySelector(".leaflet-interactive").setAttribute('fill','#ffffff');
-    // $('.leaflet-interactive').setAttribute('stroke','#ffffff');
-    // $('.leaflet-interactive').setAttribute('fill','#ffffff');
+    // document.querySelector(".leaflet-interactive").setAttribute('stroke','#ffffff');
+    // document.querySelector(".leaflet-interactive").setAttribute('fill','#ffffff');
 
     this.marcador = L.icon({
       iconUrl: 'assets/icon/marker-icon-fondopes.png',
-      // iconSize: [38, 95],
-      // iconAnchor: [22, 94],
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
       // popupAnchor: [-3, -76],
-      // shadowUrl: 'assets/icon/my-icon-shadow.png',
-      // shadowSize: [68, 95],
-      // shadowAnchor: [22, 94]
+      shadowUrl: 'assets/icon/marker-shadow.png',
+      shadowSize: [41, 41],
+      shadowAnchor: [12, 41]
     });
     
     this.iniMarcadores();
