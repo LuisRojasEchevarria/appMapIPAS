@@ -292,4 +292,12 @@ export class MapaComponent implements OnInit   {
     }
   }
 
+  getContent() {
+    return document.querySelector('ion-content');
+  }
+
+  scrollToTop() {
+    this.getContent().scrollToTop(500);
+  }
+
 }

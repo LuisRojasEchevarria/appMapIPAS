@@ -23,9 +23,21 @@
 
 .map-frame {
   border: 2px solid black;
-  height: 100%;
+  height: 80%;
+  width: 90%;
+  margin-left: 20px;
+  margin-right: 20px;
 }
 
 #map {
   height: 100%;
+  width: 100%;
+} 
+
+.btntop{
+  position:fixed;
+  bottom: 50px;
+  height: 30px;
+  width: 50px;
+  right: 10px;
 }

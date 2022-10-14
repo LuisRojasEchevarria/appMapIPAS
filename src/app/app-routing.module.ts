@@ -10,6 +10,10 @@ const routes: Routes = [
   {
     path: 'mapa',
     component: MapaComponent,
+  },
+  {
+    path: 'detallesipa',
+    loadChildren: () => import('./detallesipa/detallesipa.module').then( m => m.DetallesipaPageModule)
   }
 ];
 
