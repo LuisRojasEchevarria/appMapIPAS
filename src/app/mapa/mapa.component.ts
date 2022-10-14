@@ -112,6 +112,8 @@ export class MapaComponent implements OnInit   {
           console.error(error);
         }
       ); 
+    } else {
+      $('#filtro_dpa').val("TODOS").trigger("change");
     }
   }
 
@@ -183,8 +185,9 @@ export class MapaComponent implements OnInit   {
     this.iniMarcadores();
   }
 
+  // marckposicion = this.marcadorposicion;
   
-  private iniMarcadores(): void {
+  iniMarcadores(): void {
     let marck = this.marcador;
     let marckposicion = this.marcadorposicion;
     this.serviceMapaIpas.ipas().subscribe(
@@ -200,14 +203,16 @@ export class MapaComponent implements OnInit   {
         for(let i=0; i<marckposicion.length; i++){
           this.map.addLayer(marckposicion[i]);
         }
+        this.map.setView([-12.064137562030421, -77.03555666235727], 5);
       },
       error => {
         console.error(error);
       }
     );
   }  
-
+  
   filtrarIpas(): void {
+    let marck = this.marcador;
     let dataSearch = this.formSearch.value;
     if(dataSearch.idDepartamento == '' || dataSearch.idDepartamento  == null || dataSearch.idDepartamento  == undefined){ dataSearch.idDepartamento  = 'TODOS'; }
     if(dataSearch.idIpa == '' || dataSearch.idIpa  == null || dataSearch.idIpa  == undefined){ dataSearch.idIpa  = 'TODOS'; }
@@ -220,7 +225,27 @@ export class MapaComponent implements OnInit   {
       result => {
         if(result!='ERROR'){
           console.log(result);
-
+          this.BorrarMarcador();
+          let marckposicion = this.marcadorposicion;
+          if(dataSearch.idDepartamento !='TODOS'){
+            let depalati = result[0].Infra_DepLatitud;
+            let depalong = result[0].Infra_DepLongitud;
+            this.map.setView([depalati, depalong], 8);
+          } else {
+            this.map.setView([-12.064137562030421, -77.03555666235727], 5);
+          }
+          if(result.length==1){ this.FocusMarker(result[0].Infra_Latitud,result[0].Infra_Longitud); }
+          result.forEach(function (item) {
+            let marker = new L.marker([item.Infra_Latitud,item.Infra_Longitud])
+            .bindPopup('<a href="#"><span><h4 style="text-align: center;"><b>'+item.Infra_Nombre+'</b></h4></span></a><span><h2 style="font-size: 14px; text-align: center;">'+item.Departamento+' - '+item.Provincia+' - '+item.Distrito+'</h2></span>')
+            .setIcon(marck)
+            .on('click',function(ev) { ev.target.openPopup();});
+            // .on('click', this.setOpen(true));
+            marckposicion.push(marker);
+          }); 
+          for(let i=0; i<marckposicion.length; i++){
+            this.map.addLayer(marckposicion[i]);
+          }
         }else{
           console.log('ese departamento no tiene ipas');
           this.alert('ERROR','','No se encontraron registros');
@@ -240,6 +265,9 @@ export class MapaComponent implements OnInit   {
 
   limpiar(): void {
     console.log('btn limpiar');
+    $('#filtro_depa').val("TODOS").trigger("change");
+    $('#inputnombre').val("");
+    this.iniMarcadores();
   }
 
   isModalOpen:boolean = false;
@@ -247,6 +275,21 @@ export class MapaComponent implements OnInit   {
   setOpen(isOpen: boolean) {
     this.texto = "funciono";
     this.isModalOpen = isOpen;
+  }
+
+  FocusMarker(lat,lon){
+    this.map.setView([lat, lon], 12); 
+  }
+
+  BorrarMarcador() {  
+    for(let i=0;i<this.marcadorposicion.length;i++) {
+        this.map.removeLayer(this.marcadorposicion[i]);
+    }
+    if(this.marcadorposicion.length>0){
+        this.marcadorposicion = [];
+    } else {
+        
+    }
   }
 
 }

@@ -16,7 +16,7 @@
           <ion-list class="fondofiltro">
             <ion-item class="fondofiltro">
               <ion-label position="floating">Departamento</ion-label>
-              <ion-select interface="popover" placeholder="" formControlName="idDepartamento" (ionChange)="listarIPAS();">
+              <ion-select id="filtro_depa" interface="popover" placeholder="" formControlName="idDepartamento" (ionChange)="listarIPAS();">
                 <ion-select-option *ngFor="let item of departamentos" [value]="item.Dpto_Id">
                   {{ item.Dpto_Nombre }}
                 </ion-select-option>
@@ -24,7 +24,7 @@
             </ion-item>    
             <ion-item class="fondofiltro">
               <ion-label position="floating">Desembarcadero</ion-label>
-              <ion-select interface="popover" placeholder="" formControlName="idIpa">
+              <ion-select id="filtro_dpa" interface="popover" placeholder="" formControlName="idIpa">
                 <ion-select-option *ngFor="let item of dpas" [value]="item.Infra_Id">
                   {{ item.NOM }}
                 </ion-select-option>
@@ -32,7 +32,7 @@
             </ion-item>
             <ion-item class="fondofiltro">
               <ion-label position="floating">Nombre del Desembarcadero</ion-label>
-              <ion-input type="text" formControlName="nomIpa" placeholder="Ingrese nombre..." maxlength="20"></ion-input>
+              <ion-input id="inputnombre" type="text" formControlName="nomIpa" placeholder="Ingrese nombre..." maxlength="20"></ion-input>
             </ion-item>
             <ion-item class="fondofiltro">
               <ion-grid>
