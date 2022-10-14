@@ -1,3 +1,12 @@
+.ionheader {
+  background-color: #3c8dbc;
+  padding: 20px;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: small;
+  text-align: center;
+}
+
 .map-container {
   // position: absolute;
   top: 0;
@@ -15,4 +24,11 @@
 
 #map {
   height: 100%;
+}
+
+path[stroke] {
+  background-color: #ffffff !important;
+}
+path[fill] {
+  background-color: #ffffff !important;
 }

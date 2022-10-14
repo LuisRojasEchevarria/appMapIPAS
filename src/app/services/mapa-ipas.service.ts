@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class MapaIpasService {
 
-  url = `${environment.HOST_URL}/serviciomapaexterno`;
+  url = `${environment.HOST_URL}/servicioMapaexterno`;
   
   constructor(private http: HttpClient) { }
 
@@ -17,6 +17,14 @@ export class MapaIpasService {
 
   listaIPAS(data: any) {
     return this.http.post<any>(`${this.url}/listadeipa`,data);
+  }
+
+  ipas() {
+    return this.http.post<any>(`${this.url}/ipas`,'');
+  }
+  
+  ipasxfiltro(data: any) {
+    return this.http.post<any>(`${this.url}/ipasxfiltro`,data);
   }
 
 }

@@ -9,6 +9,9 @@ import {
   AbstractControl,
   ValidationErrors
 } from "@angular/forms";
+import { REGIONES } from './peru-regiones.json';
+import { AlertController } from '@ionic/angular';
+import * as $ from 'jquery'
 
 @Component({
   selector: 'app-mapa',
@@ -31,6 +34,7 @@ export class MapaComponent implements OnInit   {
 
   constructor(
     private formBuilder: FormBuilder,
+    private alertController: AlertController,
     private serviceMapaIpas: MapaIpasService
   ) { }
 
@@ -42,7 +46,7 @@ export class MapaComponent implements OnInit   {
     {
       idDepartamento: [null],
       idIpa: [null], 
-      txt_search: [null], 
+      nomIpa: [null], 
     }
   );
 
@@ -54,19 +58,61 @@ export class MapaComponent implements OnInit   {
     this.initMap();
   }
 
+  async alert(titulo,subTitulo,mensaje) {
+    const alert = await this.alertController.create({
+      header: titulo,
+      subHeader: subTitulo,
+      message: mensaje,
+      buttons: ['OK'],
+    });
+    await alert.present();
+  }
+
   listaDepartamentos(): void {
-    this.serviceMapaIpas.listaDepartamentos().subscribe(data => {
-      this.departamentos = data;
-    }); 
+    this.serviceMapaIpas.listaDepartamentos().subscribe(
+      result => {
+        let temp: {
+          Dpto_Id?: string;
+          Dpto_Nombre?: string;
+        } = {
+          Dpto_Id:'TODOS',
+          Dpto_Nombre:'TODOS'
+        };
+        result.unshift(temp);
+        this.departamentos = result.filter(x=>x.Dpto_Id!='00');
+      },
+      error => {
+        console.error(error);
+      }
+    ); 
   }
 
   listarIPAS(): void {
-    let depa = this.formSearch.value.idDepartamento;
-    let formData = new FormData;
-    formData.append('depa',depa);
-    this.serviceMapaIpas.listaIPAS(formData).subscribe(data => {
-      this.dpas = data;
-    }); 
+    if(this.formSearch.value.idDepartamento!='TODOS') {
+      let formData = new FormData;
+      formData.append('depa',this.formSearch.value.idDepartamento);
+      this.serviceMapaIpas.listaIPAS(formData).subscribe(
+        result => {
+          if(result!='ERROR'){
+            let temp: {
+              Infra_Id?: string;
+              NOM?: string;
+            } = {
+              Infra_Id:'TODOS',
+              NOM:'TODOS'
+            };
+            result.unshift(temp);
+            this.dpas = result;
+          }else{
+            console.log('ese departamento no tiene ipas');
+            this.alert('ERROR','','No se encontraron registros');
+          }
+        },
+        error => {
+          console.error(error);
+        }
+      ); 
+    }
   }
 
   private initMap(): void {
@@ -120,13 +166,14 @@ export class MapaComponent implements OnInit   {
     this.layerControl.addBaseLayer(this.CyclOSM, "Ciclovías");
     this.layerControl.addBaseLayer(this.osm, "OpenStreetMap");
 
-    // L.geoJson(this.regiones).addTo(this.map);
-
-    // $('.leaflet-interactive').attr('stroke','#ffffff');
-    // $('.leaflet-interactive').attr('fill','#ffffff');
+    L.geoJson(REGIONES).addTo(this.map);
+    document.querySelector(".leaflet-interactive").setAttribute('stroke','#ffffff');
+    document.querySelector(".leaflet-interactive").setAttribute('fill','#ffffff');
+    // $('.leaflet-interactive').setAttribute('stroke','#ffffff');
+    // $('.leaflet-interactive').setAttribute('fill','#ffffff');
 
     this.marcador = L.icon({
-      iconUrl: 'assets/icon/marker-icon.png',
+      iconUrl: 'assets/icon/marker-icon-fondopes.png',
       // iconSize: [38, 95],
       // iconAnchor: [22, 94],
       // popupAnchor: [-3, -76],
@@ -140,30 +187,68 @@ export class MapaComponent implements OnInit   {
 
   
   private iniMarcadores(): void {
-    console.log('iniMarcadores');
-    
-
-
-    var marker = new L.marker([-12.064137562030421, -77.03555666235727])
-    .bindPopup('info de la obra')
-    .setIcon(this.marcador)
-    .on('click',function(ev) { ev.target.openPopup();})
-    .on('mouseover', function(ev) { ev.target.openPopup(); });
-
-    this.marcadorposicion.push(marker);
-    for(let i=0; i<this.marcadorposicion.length; i++){
-      this.map.addLayer(this.marcadorposicion[i]);
-    }
+    let marck = this.marcador;
+    let marckposicion = this.marcadorposicion;
+    this.serviceMapaIpas.ipas().subscribe(
+      result => {
+        result.forEach(function (item) {
+          let marker = new L.marker([item.Infra_Latitud,item.Infra_Longitud])
+          .bindPopup('<a href="#"><span><h4 style="text-align: center;"><b>'+item.Infra_Nombre+'</b></h4></span></a><span><h2 style="font-size: 14px; text-align: center;">'+item.Departamento+' - '+item.Provincia+' - '+item.Distrito+'</h2></span>')
+          .setIcon(marck)
+          .on('click',function(ev) { ev.target.openPopup();});
+          // .on('click', this.setOpen(true));
+          marckposicion.push(marker);
+        });        
+        for(let i=0; i<marckposicion.length; i++){
+          this.map.addLayer(marckposicion[i]);
+        }
+      },
+      error => {
+        console.error(error);
+      }
+    );
   }  
 
+  filtrarIpas(): void {
+    let dataSearch = this.formSearch.value;
+    if(dataSearch.idDepartamento == '' || dataSearch.idDepartamento  == null || dataSearch.idDepartamento  == undefined){ dataSearch.idDepartamento  = 'TODOS'; }
+    if(dataSearch.idIpa == '' || dataSearch.idIpa  == null || dataSearch.idIpa  == undefined){ dataSearch.idIpa  = 'TODOS'; }
+    if(dataSearch.nomIpa  == null || dataSearch.nomIpa  == undefined){ dataSearch.nomIpa  = ''; }
+    let formData = new FormData;
+    formData.append('depa',dataSearch.idDepartamento);
+    formData.append('tipo',dataSearch.idIpa);
+    formData.append('nombre',dataSearch.nomIpa);
+    this.serviceMapaIpas.ipasxfiltro(formData).subscribe(
+      result => {
+        if(result!='ERROR'){
+          console.log(result);
+
+        }else{
+          console.log('ese departamento no tiene ipas');
+          this.alert('ERROR','','No se encontraron registros');
+        }
+      },
+      error => {
+        console.error(error);
+      }
+    ); 
+
+  }
+
   buscar(): void {
-    let data = this.formSearch.value;
-    console.log('buscar');
-    console.log(data);
+    console.log('btn buscar');
+    this.filtrarIpas();
   }
 
   limpiar(): void {
-    console.log('limpiar');
+    console.log('btn limpiar');
+  }
+
+  isModalOpen:boolean = false;
+  texto: string = "";
+  setOpen(isOpen: boolean) {
+    this.texto = "funciono";
+    this.isModalOpen = isOpen;
   }
 
 }
