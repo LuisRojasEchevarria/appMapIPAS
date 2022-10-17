@@ -27,4 +27,8 @@ export class MapaIpasService {
     return this.http.post<any>(`${this.url}/ipasxfiltro`,data);
   }
 
+  buscarxid(data: any) {
+    return this.http.post<any>(`${this.url}/buscarxid`,data);//cambiar url para traer al data
+  }
+
 }

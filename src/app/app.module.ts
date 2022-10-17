@@ -10,11 +10,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MapaComponent } from './mapa/mapa.component';
+import { DetalleIpaComponent } from './detalle-ipa/detalle-ipa.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    MapaComponent
+    MapaComponent,
+    DetalleIpaComponent
   ],
   imports: [
     BrowserModule,

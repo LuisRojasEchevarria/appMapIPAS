@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { MapaComponent } from './mapa/mapa.component';
+import { DetalleIpaComponent } from './detalle-ipa/detalle-ipa.component';
 
 const routes: Routes = [
   { path: '',
@@ -12,8 +13,8 @@ const routes: Routes = [
     component: MapaComponent,
   },
   {
-    path: 'detallesipa',
-    loadChildren: () => import('./detallesipa/detallesipa.module').then( m => m.DetallesipaPageModule)
+    path: 'detalle-ipa/:id',
+    component: DetalleIpaComponent,
   }
 ];
 

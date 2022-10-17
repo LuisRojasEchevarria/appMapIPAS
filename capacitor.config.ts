@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
+  appId: 'pe.com.fondepes',
   appName: 'appMapIPAS',
   webDir: 'www',
   bundledWebRuntime: false
