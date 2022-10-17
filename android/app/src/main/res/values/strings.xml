@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">appMapIPAS</string>
+    <string name="title_activity_main">appMapIPAS</string>
+    <string name="package_name">pe.com.fondepes</string>
+    <string name="custom_url_scheme">pe.com.fondepes</string>
+</resources>
