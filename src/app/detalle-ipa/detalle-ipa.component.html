@@ -1,14 +1,52 @@
 <ion-header>
   <ion-toolbar>
     <ion-title class="ionheader">
-      Detalle de Ipa - {{ nombre }}
+      {{ nombreipa }}
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
-  <ion-grid class="table">
+  <ion-card color="light" id="cardinfoge">
+    <ion-card-header class="cardinfostyle">
+      <ion-card-title class="cardtitle" id="cardnombre"><b>NOMBRE:</b> {{ nombreipa }} </ion-card-title>
+      <ion-card-title class="cardtitle" id="cardtipo"><b>TIPO:</b> {{ tipoipa }} </ion-card-title>
+      <ion-card-title class="cardtitle" id="cardubicacion"><b>UBICACIÓN:</b> {{ ubiipa }} </ion-card-title>
+      <ion-card-title class="cardtitle" id="cardhabilitado">
+        <b>HABILITADO:</b> 
+        <span *ngIf=" ihcond=='1'">
+         &nbsp;<ion-icon name="checkmark-circle" color="success" class="cardinfoico"></ion-icon>&nbsp;
+        </span>
+        <span *ngIf=" ihcond=='0'">
+         &nbsp;<ion-icon name="close-circle" color="danger" class="cardinfoico"></ion-icon>&nbsp;
+        </span>
+        {{ habiipa }} 
+      </ion-card-title>
+      <ion-card-title class="cardtitle" id="cardestado">
+        <b>ESTADO:</b> 
+        <span *ngIf=" estaipa=='1'">
+          &nbsp;<ion-icon name="ellipse" color="success" class="cardinfoico"></ion-icon>&nbsp;OPERATIVO
+        </span>
+        <span *ngIf=" estaipa=='0'">
+          &nbsp;<ion-icon name="ellipse" color="danger" class="cardinfoico"></ion-icon>&nbsp;NO OPERATIVO
+        </span>
+        <span *ngIf=" estaipa=='2'">
+          &nbsp;<ion-icon name="ellipse" color="warning" class="cardinfoico"></ion-icon>&nbsp;PARCIALMENTE OPERATIVO
+        </span>
+        <span *ngIf=" itcond=='1'">
+          &nbsp;-&nbsp;<ion-icon name="checkmark-circle" color="success" class="cardinfoico"></ion-icon>&nbsp;TRANSFERIDO
+        </span>
+        <span *ngIf=" itcond=='0'">
+          &nbsp;-&nbsp;<ion-icon name="close-circle" color="danger" class="cardinfoico"></ion-icon>&nbsp;NO TRANSFERIDO
+        </span>
+        <span *ngIf=" dispoleipa!=''">
+          &nbsp;-&nbsp;{{ dispoleipa }} 
+        </span>
+      </ion-card-title>
+    </ion-card-header>
+  </ion-card>
+  <!-- ************************************************** -->
+  <!-- <ion-grid class="table">
     <ion-row class="tableHeader">
       <ion-col size="12">
         INFORMACIÓN GENERAL
@@ -19,9 +57,9 @@
         Nombre: 
       </ion-col>      
       <ion-col size="8">
-        {{ nombre }}
+        {{ nombreipa }}
       </ion-col>
     </ion-row>
-  </ion-grid>
+  </ion-grid> -->
 </ion-content>
 

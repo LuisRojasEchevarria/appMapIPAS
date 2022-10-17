@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
+import { $ } from 'protractor';
 import { MapaIpasService } from 'src/app/services/mapa-ipas.service';
 
 @Component({
@@ -11,6 +12,15 @@ export class DetalleIpaComponent implements OnInit {
 
   id:any;
   nombre: string;
+  nombreipa: string;
+  ubiipa: string;
+  tipoipa: string;
+  habiipa: string;
+  ihcond: any;
+  estaipa: any;
+  itcond: any;
+  dispoleipa: string;
+
 
   constructor(
     private alertController: AlertController,
@@ -27,7 +37,60 @@ export class DetalleIpaComponent implements OnInit {
       result => {
         console.log(result);
         if(result!='ERROR'){
-          this.cargarData(result[0]);
+          let valor = result[0];
+          let habdet = '';
+          let tipo_mostrar = '';
+          if(valor.I_HAB_DET == '2'){
+              habdet = 'INTEGRAL (DESCARGA)';
+          } else if(valor.I_HAB_DET == '1'){
+              habdet = 'PARCIAL (DESCARGA/TAREAS PREVIAS)';
+          } else {
+              habdet = 'NINGUNO';
+          }
+
+          if(valor.Infra_Nombre=='' || valor.Infra_Nombre==null || valor.Infra_Nombre==undefined || valor.Infra_Nombre=='-'){valor.Infra_Nombre='';}
+          if(valor.Infra_Tipo=='' || valor.Infra_Tipo==null || valor.Infra_Tipo==undefined || valor.Infra_Tipo=='-'){valor.Infra_Tipo='';}
+          if(valor.Departamento=='' || valor.Departamento==null || valor.Departamento==undefined || valor.Departamento=='-'){valor.Departamento='';}
+          if(valor.Provincia=='' || valor.Provincia==null || valor.Provincia==undefined || valor.Provincia=='-'){valor.Provincia='';}
+          if(valor.Distrito=='' || valor.Distrito==null || valor.Distrito==undefined || valor.Distrito=='-'){valor.Distrito='';}
+          if(valor.V_DISPOSITIVO_LEGAL=='' || valor.V_DISPOSITIVO_LEGAL==null || valor.V_DISPOSITIVO_LEGAL==undefined || valor.V_DISPOSITIVO_LEGAL=='-'){valor.V_DISPOSITIVO_LEGAL='';}
+          switch (valor.Infra_Tipo) {    
+            case 'AFA':
+              tipo_mostrar = 'AFA - ATRACADERO FLOTANTE ARTESANAL';
+              break;
+            case 'CA':
+              tipo_mostrar = 'CA - CENTRO ACUÍCOLA';
+              break;
+            case 'CEP':
+              tipo_mostrar = 'CEP - CENTRO DE ENTRENAMIENTO PESQUERO';
+              break;
+            case 'CP':
+              tipo_mostrar = 'CP - CENTRO PESQUERO';
+              break;
+            case 'DPA':
+              tipo_mostrar = 'DPA - DESEMBARCADERO PESQUERO ARTESANAL';
+              break;
+            case 'MFA':
+              tipo_mostrar = 'MFA - MUELLE FISCAL ARTESANAL';
+              break;
+            case 'MPA':
+              tipo_mostrar = 'MPA - MUELLE PESQUERO ARTESANAL';
+              break;
+            case 'SC':
+              tipo_mostrar = 'SC - ';
+              break;
+            case 'TPZ':
+              tipo_mostrar = 'TPZ - TERMINAL PESQUERO ZONAL';
+              break;
+            }
+            this.nombreipa = valor.Infra_Nombre;
+            this.tipoipa = tipo_mostrar;
+            this.ubiipa = valor.Departamento +' - '+ valor.Provincia +' - '+ valor.Distrito;
+            this.habiipa = habdet;
+            this.ihcond = valor.B_HAB;
+            this.estaipa = valor.I_EST;
+            this.itcond = valor.B_TRANS;
+            this.dispoleipa = valor.V_DISPOSITIVO_LEGAL;
         }else{
           this.alert('ERROR','','No se encontraron registros');
         }

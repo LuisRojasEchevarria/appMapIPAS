@@ -190,6 +190,12 @@ export class MapaComponent implements OnInit   {
   iniMarcadores(): void {
     let marck = this.marcador;
     let marckposicion = this.marcadorposicion;
+    let depafiltro = this.formSearch.value.idDepartamento;
+    if(depafiltro==null || depafiltro==''){depafiltro='TODOS'};
+    let dpafiltro = this.formSearch.value.idIpa;
+    if(dpafiltro==null || dpafiltro==''){dpafiltro='TODOS'};
+    let nomfiltro = this.formSearch.value.nomIpa;
+    if(nomfiltro==null){nomfiltro=''};
     this.serviceMapaIpas.ipas().subscribe(
       result => {
         result.forEach(function (item) {
