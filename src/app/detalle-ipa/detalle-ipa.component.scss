@@ -6,6 +6,7 @@
     font-size: medium;
     text-align: center;
     vertical-align: middle;
+    // width: 240px;
 }
 
 .btnatrastop {
@@ -15,8 +16,19 @@
     left: 10px;
     font-size: 28px;
     top: 15px;
+    width: 48px;
 }
 
+.back-button-has-icon-only {
+    position: absolute;
+    z-index: 1999;
+    top: 5px;
+    color: #ffffff;
+}
+.button-inner {
+    left: 0px;
+    top: 5px;
+}
 .cardinfostyle {
     padding: 10px !important;
 }

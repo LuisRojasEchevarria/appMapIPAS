@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
-import { $ } from 'protractor';
+import * as $ from 'jquery'
 import { MapaIpasService } from 'src/app/services/mapa-ipas.service';
+import * as HighCharts from 'highcharts';
 
 @Component({
   selector: 'app-detalle-ipa',
@@ -18,12 +19,14 @@ export class DetalleIpaComponent implements OnInit {
   habiipa: string;
   ihcond: any;
   estaipa: any;
+  estcon: string;
   itcond: any;
   dispoleipa: string;
   nombreipabuscar: string;
   urldocumento: string;
   numfotos: any;
   imagenes: any[] = [];
+  json: any[] = [];
 
   constructor(
     private alertController: AlertController,
@@ -44,13 +47,21 @@ export class DetalleIpaComponent implements OnInit {
           let habdet = '';
           let tipo_mostrar = '';
           if(valor.I_HAB_DET == '2'){
-              habdet = 'INTEGRAL (DESCARGA)';
+            habdet = 'INTEGRAL (DESCARGA)';
           } else if(valor.I_HAB_DET == '1'){
-              habdet = 'PARCIAL (DESCARGA/TAREAS PREVIAS)';
+            habdet = 'PARCIAL (DESCARGA/TAREAS PREVIAS)';
           } else {
-              habdet = 'NINGUNO';
+            habdet = 'NINGUNO';
           }
-
+          if(valor.I_EST == '1'){
+            this.estcon = 'Operativo';
+          } else if(valor.I_EST == '0'){
+            this.estcon = 'No Operativo'
+          } else if(valor.I_EST == '2'){
+            this.estcon = 'Parcialmente Operativo'
+          } else {
+            this.estcon = 'Sin Datos';
+          }
           if(valor.Infra_Nombre=='' || valor.Infra_Nombre==null || valor.Infra_Nombre==undefined || valor.Infra_Nombre=='-'){valor.Infra_Nombre='';}
           if(valor.Infra_Tipo=='' || valor.Infra_Tipo==null || valor.Infra_Tipo==undefined || valor.Infra_Tipo=='-'){valor.Infra_Tipo='';}
           if(valor.Departamento=='' || valor.Departamento==null || valor.Departamento==undefined || valor.Departamento=='-'){valor.Departamento='';}
@@ -98,7 +109,7 @@ export class DetalleIpaComponent implements OnInit {
             this.nombreipabuscar = this.nombreipabuscar.replace(' ','');
             this.urldocumento = 'https://intranet2.fondepes.gob.pe/DOCUMENTO/SIMON/Mapas_Imagenes_Externos/'+this.nombreipabuscar+'/dpa/';
             this.obtenercantidadfotos();
-            // console.log(this.urldocumento);
+            this.ionViewDidLoad();
         }else{
           this.alert('ERROR','','No se encontraron registros');
         }
@@ -139,6 +150,79 @@ export class DetalleIpaComponent implements OnInit {
         console.error(error);
       }
     ); 
+  }
+
+  ionViewDidLoad(): void {
+    // $('#divcontainer').html('');
+    // $('#divcontainer').html('<div id="container" style="display: block;"></div>');
+    //let chart = {
+    //    type: 'column'
+    //};
+    //let title = {
+    //    text: this.nombreipa
+    //};
+    //let subtitle = {
+    //    text: ''
+    //};
+    //let colors = 
+    //    ['#3c8dbc', // azul
+    //    '#49b6bb', // verde
+    //    '#00c0ef'] // celeste
+    //;
+    //let xAxis = {
+    //    categories: ['Información General']
+    //};
+    //let yAxis = {
+    //    min: 0,
+    //    title: {
+    //        text: 'Cantidad',
+    //        align: 'high'
+    //    }
+    //};
+    //let tooltip = {
+    //    headerFormat: '<table>',
+    //    pointFormat: '<tr><td style = "color:{series.color};padding:0"><b>{series.name}</b>: </td>' +
+    //       '<td style = "padding:0">{point.y:.1f}</td></tr>',
+    //    footerFormat: '</table>',
+    //    shared: true,
+    //    useHTML: true
+    //};
+    //let plotOptions = {
+    //    column: {
+    //       pointPadding: 0.2,
+    //       borderWidth: 0
+    //    }
+    //}; 
+    //let credits = {
+    //    enabled: false
+    //};
+    //let series= [
+    //    {
+    //       name: 'Pescadores',
+    //       data: ['15003']
+    //    }, 
+    //    {
+    //       name: 'Beneficiarios',
+    //       data: ['15303']
+    //    }, 
+    //    {
+    //       name: 'Embarcaciones',
+    //       data: ['15163']
+    //    }
+    //];  
+    //this.json.push({chart: chart}); 
+    //this.json.push({title: title});   
+    //this.json.push({subtitle: subtitle}); 
+    //this.json.push({tooltip: tooltip});
+    //this.json.push({colors: colors});
+    //this.json.push({xAxis: xAxis});
+    //this.json.push({yAxis: yAxis});  
+    //this.json.push({series: series});
+    //this.json.push({plotOptions: plotOptions});  
+    //this.json.push({credits: credits});
+    //$('#container').chart(this.json);
+    //console.log(this.json);
+    
   }
 
   cargarData(data:any){
