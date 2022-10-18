@@ -5,6 +5,16 @@
     font-weight: bold;
     font-size: medium;
     text-align: center;
+    vertical-align: middle;
+}
+
+.btnatrastop {
+    background: none;
+    color: #ffffff;
+    position: fixed;
+    left: 10px;
+    font-size: 28px;
+    top: 15px;
 }
 
 .cardinfostyle {
@@ -13,11 +23,46 @@
 
 .cardtitle {
     font-size: 16px !important;
+    font-weight: bold;
+    vertical-align: middle !important;
+}
+
+.cardtext {
+    font-size: 16px !important;
+    vertical-align: middle !important;
 }
 
 .cardinfoico {
     padding: 0px !important;
     margin: 0px !important;
-    vertical-align: bottom !important;
+    vertical-align: middle !important;
     font-size: 24px;
+}
+
+.interline {
+    line-height: 1.5;
+}
+
+.headertable {
+    font-size: 18px;
+    font-weight: bold;
+    border-bottom: 2px solid #3c8dbc;
+    margin-bottom: 15px;
+}
+
+#ion-slides {
+    height: 100%;
+}
+
+.swiper-slide {
+    display: block;
+}
+
+.swiper-slide img {
+    height: 227px !important;
+    // width: 362px !important;
+    max-height: 100%;
+    max-width: 100%;
+    margin: 0px;
+    pointer-events: none;
 }

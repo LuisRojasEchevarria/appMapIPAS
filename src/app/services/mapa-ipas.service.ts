@@ -31,4 +31,8 @@ export class MapaIpasService {
     return this.http.post<any>(`${this.url}/buscarxid`,data);//cambiar url para traer al data
   }
 
+  cantidadFotos(data: any) {
+    return this.http.post<any>(`${this.url}/obtenercantidadfotos`,data);
+  }
+
 }

@@ -200,7 +200,7 @@ export class MapaComponent implements OnInit   {
       result => {
         result.forEach(function (item) {
           let marker = new L.marker([item.Infra_Latitud,item.Infra_Longitud])
-          .bindPopup('<a href="detalle-ipa/'+item.Infra_Id+'"><span><h4 style="text-align: center;"><b>'+item.Infra_Nombre+'</b></h4></span></a><span><h2 style="font-size: 14px; text-align: center;">'+item.Departamento+' - '+item.Provincia+' - '+item.Distrito+'</h2></span>')
+          .bindPopup('<a href="detalle-ipa/'+item.Infra_Id+'" style="text-decoration: none !important;"><span><h4 style="text-align: center; text-decoration: none !important;"><b>'+item.Infra_Nombre+'</b></h4></span></a><span><h2 style="font-size: 14px; text-align: center;">'+item.Departamento+' - '+item.Provincia+' - '+item.Distrito+'</h2></span>')
           .setIcon(marck)
           .on('click',function(ev) { ev.target.openPopup();});
           // .on('click', this.setOpen(true));
@@ -243,7 +243,7 @@ export class MapaComponent implements OnInit   {
           if(result.length==1){ this.FocusMarker(result[0].Infra_Latitud,result[0].Infra_Longitud); }
           result.forEach(function (item) {
             let marker = new L.marker([item.Infra_Latitud,item.Infra_Longitud])
-            .bindPopup('<a href="detalle-ipa/'+item.Infra_Id+'"><span><h4 style="text-align: center;"><b>'+item.Infra_Nombre+'</b></h4></span></a><span><h2 style="font-size: 14px; text-align: center;">'+item.Departamento+' - '+item.Provincia+' - '+item.Distrito+'</h2></span>')
+            .bindPopup('<a href="detalle-ipa/'+item.Infra_Id+'" style="text-decoration: none !important;"><span><h4 style="text-align: center; text-decoration: none !important;"><b>'+item.Infra_Nombre+'</b></h4></span></a><span><h2 style="font-size: 14px; text-align: center;">'+item.Departamento+' - '+item.Provincia+' - '+item.Distrito+'</h2></span>')
             .setIcon(marck)
             .on('click',function(ev) { ev.target.openPopup();});
             marckposicion.push(marker);

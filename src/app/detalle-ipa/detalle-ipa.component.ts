@@ -10,7 +10,7 @@ import { MapaIpasService } from 'src/app/services/mapa-ipas.service';
 })
 export class DetalleIpaComponent implements OnInit {
 
-  id:any;
+  id: any;
   nombre: string;
   nombreipa: string;
   ubiipa: string;
@@ -20,7 +20,10 @@ export class DetalleIpaComponent implements OnInit {
   estaipa: any;
   itcond: any;
   dispoleipa: string;
-
+  nombreipabuscar: string;
+  urldocumento: string;
+  numfotos: any;
+  imagenes: any[] = [];
 
   constructor(
     private alertController: AlertController,
@@ -91,6 +94,11 @@ export class DetalleIpaComponent implements OnInit {
             this.estaipa = valor.I_EST;
             this.itcond = valor.B_TRANS;
             this.dispoleipa = valor.V_DISPOSITIVO_LEGAL;
+            this.nombreipabuscar = valor.nombredpa;
+            this.nombreipabuscar = this.nombreipabuscar.replace(' ','');
+            this.urldocumento = 'https://intranet2.fondepes.gob.pe/DOCUMENTO/SIMON/Mapas_Imagenes_Externos/'+this.nombreipabuscar+'/dpa/';
+            this.obtenercantidadfotos();
+            // console.log(this.urldocumento);
         }else{
           this.alert('ERROR','','No se encontraron registros');
         }
@@ -109,6 +117,28 @@ export class DetalleIpaComponent implements OnInit {
       buttons: ['OK'],
     });
     await alert.present();
+  }
+
+  obtenercantidadfotos(): void{
+    let formData = new FormData;
+    formData.append('carpeta',this.nombreipabuscar);
+    this.serviceMapaIpas.cantidadFotos(formData).subscribe(
+      result => {
+        if(result!='ERROR'){
+          this.numfotos=result;
+          for(let i=0; i<this.numfotos; i++){
+            let url = this.urldocumento+'Imagen'+i+'.jpg';
+            this.imagenes.push({url: url});
+          }
+        }else{
+          console.log('ese departamento no tiene imagenes');
+          this.alert('ERROR','','No se encontraron Imágenes');
+        }
+      },
+      error => {
+        console.error(error);
+      }
+    ); 
   }
 
   cargarData(data:any){
