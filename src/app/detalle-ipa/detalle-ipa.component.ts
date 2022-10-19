@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import * as $ from 'jquery'
 import { MapaIpasService } from 'src/app/services/mapa-ipas.service';
-import * as HighCharts from 'highcharts';
+import * as Anychart from 'anychart';
 
 @Component({
   selector: 'app-detalle-ipa',
@@ -153,76 +153,27 @@ export class DetalleIpaComponent implements OnInit {
   }
 
   ionViewDidLoad(): void {
-    // $('#divcontainer').html('');
-    // $('#divcontainer').html('<div id="container" style="display: block;"></div>');
-    //let chart = {
-    //    type: 'column'
-    //};
-    //let title = {
-    //    text: this.nombreipa
-    //};
-    //let subtitle = {
-    //    text: ''
-    //};
-    //let colors = 
-    //    ['#3c8dbc', // azul
-    //    '#49b6bb', // verde
-    //    '#00c0ef'] // celeste
-    //;
-    //let xAxis = {
-    //    categories: ['Información General']
-    //};
-    //let yAxis = {
-    //    min: 0,
-    //    title: {
-    //        text: 'Cantidad',
-    //        align: 'high'
-    //    }
-    //};
-    //let tooltip = {
-    //    headerFormat: '<table>',
-    //    pointFormat: '<tr><td style = "color:{series.color};padding:0"><b>{series.name}</b>: </td>' +
-    //       '<td style = "padding:0">{point.y:.1f}</td></tr>',
-    //    footerFormat: '</table>',
-    //    shared: true,
-    //    useHTML: true
-    //};
-    //let plotOptions = {
-    //    column: {
-    //       pointPadding: 0.2,
-    //       borderWidth: 0
-    //    }
-    //}; 
-    //let credits = {
-    //    enabled: false
-    //};
-    //let series= [
-    //    {
-    //       name: 'Pescadores',
-    //       data: ['15003']
-    //    }, 
-    //    {
-    //       name: 'Beneficiarios',
-    //       data: ['15303']
-    //    }, 
-    //    {
-    //       name: 'Embarcaciones',
-    //       data: ['15163']
-    //    }
-    //];  
-    //this.json.push({chart: chart}); 
-    //this.json.push({title: title});   
-    //this.json.push({subtitle: subtitle}); 
-    //this.json.push({tooltip: tooltip});
-    //this.json.push({colors: colors});
-    //this.json.push({xAxis: xAxis});
-    //this.json.push({yAxis: yAxis});  
-    //this.json.push({series: series});
-    //this.json.push({plotOptions: plotOptions});  
-    //this.json.push({credits: credits});
-    //$('#container').chart(this.json);
-    //console.log(this.json);
-    
+    // create an instance of a pie chart
+	var chart = Anychart.pie();
+	// set the data
+	chart.data([
+		["Chocolate",12]
+	]);
+	//chart.data.bind().dataLabels("enabled","false");
+	chart.innerRadius(200);
+	chart.normal().fill("#82B64C", 0.5);
+	chart.hovered().fill("#82B64C", 0.5);
+	chart.selected().fill("#82B64C", 0.7);
+	chart.labels(false);
+	chart.selected().labels(false);
+	chart.hovered().labels(false);
+	chart.tooltip(false);
+	// set chart title
+	chart.title("Top 5 pancake fillings");
+	// set the container element 
+	chart.container("container");
+	// initiate chart display
+	chart.draw();
   }
 
   cargarData(data:any){

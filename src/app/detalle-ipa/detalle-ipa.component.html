@@ -105,77 +105,7 @@
       </ion-col>      
     </ion-row>
     <ion-row style="padding-bottom: 5px; padding-left: 5px; padding-right: 5px;" id="divcontainer"> 
-      <div id="container" style="display: block;" *ngIf="estaipa=='1'">
-        <script>
-          HighCharts.chart('container', {
-            title: {
-              text: 'NOMBRE DE DPA',
-              align: 'center'
-            },
-            credits: {
-              enabled: false
-            },
-            xAxis: {
-              categories: ['']
-            },
-            yAxis: {
-              title: {
-                text: ''
-              }
-            },
-            labels: {
-              items: [{
-                html: '',//'<b>% Avance</b>',
-                style: {
-                  left: '250px',
-                  top: '18px',
-                  color: ( // theme
-                    HighCharts.defaultOptions.title.style &&
-                    HighCharts.defaultOptions.title.style.color
-                  ) || 'black'
-                }
-              }]
-            },
-            colors: 
-              //verde, rojo
-              ['#82B64C', '#FFC000', '#FF0000']
-            ,
-            plotOptions: {
-              pie: {
-                layout: 'vertical',
-                align: 'left',
-                verticalAlign: 'top',
-                allowPointSelect: true,
-                cursor: 'pointer',
-                dataLabels: {
-                    enabled: false
-                },
-                showInLegend: true
-              }
-            },            
-            series: [{
-              type: 'pie',
-              name: '%',
-              innerSize: '50%',
-              startAngle: 0,
-              endAngle: 360,
-              size: 180,
-              center: [250, 80],
-              data: [
-                ['Operativo: ', 100],
-                ['Parcialmente Operativo: ', 50],
-                {
-                  name: 'No Operativo',
-                  y: 0,
-                  showInLegend: true,
-                  dataLabels: {
-                    enabled: false
-                  }
-                }
-              ]
-            }]
-          });
-        </script>
+      <div id="container" style="display: block;">
       </div>
     </ion-row>
   </ion-card>
