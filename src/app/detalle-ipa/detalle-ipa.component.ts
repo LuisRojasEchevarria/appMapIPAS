@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import * as $ from 'jquery'
 import { MapaIpasService } from 'src/app/services/mapa-ipas.service';
-import * as Anychart from 'anychart';
+// import * as Anychart from 'anychart';
+import { ChartOptions } from 'chart.js';
 
 @Component({
   selector: 'app-detalle-ipa',
@@ -27,6 +28,15 @@ export class DetalleIpaComponent implements OnInit {
   numfotos: any;
   imagenes: any[] = [];
   json: any[] = [];
+
+  // Pie
+  public pieChartOptions: ChartOptions<'pie'> = {
+    responsive: false,
+  };
+  public pieChartLabels = [];
+  public pieChartDatasets = [];
+  public pieChartLegend = true;
+  public pieChartPlugins = [];
 
   constructor(
     private alertController: AlertController,
@@ -109,7 +119,8 @@ export class DetalleIpaComponent implements OnInit {
             this.nombreipabuscar = this.nombreipabuscar.replace(' ','');
             this.urldocumento = 'https://intranet2.fondepes.gob.pe/DOCUMENTO/SIMON/Mapas_Imagenes_Externos/'+this.nombreipabuscar+'/dpa/';
             this.obtenercantidadfotos();
-            this.ionViewDidLoad();
+            // this.ionViewDidLoad();
+            this.pie();
         }else{
           this.alert('ERROR','','No se encontraron registros');
         }
@@ -152,33 +163,37 @@ export class DetalleIpaComponent implements OnInit {
     ); 
   }
 
-  ionViewDidLoad(): void {
-    // create an instance of a pie chart
-	var chart = Anychart.pie();
-	// set the data
-	chart.data([
-		["Chocolate",12]
-	]);
-	//chart.data.bind().dataLabels("enabled","false");
-	chart.innerRadius(200);
-	chart.normal().fill("#82B64C", 0.5);
-	chart.hovered().fill("#82B64C", 0.5);
-	chart.selected().fill("#82B64C", 0.7);
-	chart.labels(false);
-	chart.selected().labels(false);
-	chart.hovered().labels(false);
-	chart.tooltip(false);
-	// set chart title
-	chart.title("Top 5 pancake fillings");
-	// set the container element 
-	chart.container("container");
-	// initiate chart display
-	chart.draw();
-  }
+  // ionViewDidLoad(): void {
+  //   // create an instance of a pie chart
+	// var chart = Anychart.pie();
+	// // set the data
+	// chart.data([
+	// 	["Chocolate",12]
+	// ]);
+	// //chart.data.bind().dataLabels("enabled","false");
+	// chart.innerRadius(200);
+	// chart.normal().fill("#82B64C", 0.5);
+	// chart.hovered().fill("#82B64C", 0.5);
+	// chart.selected().fill("#82B64C", 0.7);
+	// chart.labels(false);
+	// chart.selected().labels(false);
+	// chart.hovered().labels(false);
+	// chart.tooltip(false);
+	// // set chart title
+	// chart.title("Top 5 pancake fillings");
+	// // set the container element 
+	// chart.container("container");
+	// // initiate chart display
+	// chart.draw();
+  // }
 
-  cargarData(data:any){
-    console.log(data);
-    this.nombre = data.Infra_Nombre;
+  pie():void {
+    this.pieChartLabels = [ [ 'Download', 'Sales' ], [ 'In', 'Store', 'Sales' ], 'Mail Sales' ];
+    this.pieChartDatasets = [ {
+      data: [ 300, 500, 100 ]
+    } ];
+    this.pieChartLegend = true;
+    this.pieChartPlugins = [];
   }
 
 }
