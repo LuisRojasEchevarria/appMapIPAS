@@ -104,20 +104,22 @@
         ESTADO
       </ion-col>      
     </ion-row>
-    <ion-row style="padding-bottom: 5px; padding-left: 5px; padding-right: 5px;" id="divcontainer"> 
-      <div id="container" style="display: block;">
-      </div>
+    <ion-row style="padding-bottom: 5px; padding-left: 36px; padding-right: 36px;" id="divcontainer" class="chart-wrapper"> 
+      <canvas baseChart class="chartestado"
+        [type]="'doughnut'"
+        [datasets]="pieChartDatasets"
+        [labels]="pieChartLabels"
+        [options]="pieChartOptions"
+        [plugins]="pieChartPlugins"
+        [legend]="pieChartLegend"
+        [tooltip]="tooltip"
+        [stroke]="'stroke'"
+        [responsive]="true">
+      </canvas>
     </ion-row>
   </ion-card>
 
-  <canvas baseChart
-  [type]="'pie'"
-  [datasets]="pieChartDatasets"
-  [labels]="pieChartLabels"
-  [options]="pieChartOptions"
-  [plugins]="pieChartPlugins"
-  [legend]="pieChartLegend">
-</canvas>
+  
 
 </ion-content>
 

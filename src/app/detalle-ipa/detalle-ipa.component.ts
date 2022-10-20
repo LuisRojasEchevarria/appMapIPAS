@@ -21,13 +21,16 @@ export class DetalleIpaComponent implements OnInit {
   ihcond: any;
   estaipa: any;
   estcon: string;
+  urldocumento: string;
   itcond: any;
   dispoleipa: string;
   nombreipabuscar: string;
-  urldocumento: string;
+  colorestado: string;
+  valestado: any;
   numfotos: any;
   imagenes: any[] = [];
   json: any[] = [];
+
 
   // Pie
   public pieChartOptions: ChartOptions<'pie'> = {
@@ -36,7 +39,10 @@ export class DetalleIpaComponent implements OnInit {
   public pieChartLabels = [];
   public pieChartDatasets = [];
   public pieChartLegend = true;
+  public tooltip = false;
   public pieChartPlugins = [];
+  public innerRadius = 100;
+  public stroke = "";
 
   constructor(
     private alertController: AlertController,
@@ -64,13 +70,24 @@ export class DetalleIpaComponent implements OnInit {
             habdet = 'NINGUNO';
           }
           if(valor.I_EST == '1'){
+            this.valestado = valor.I_EST;
             this.estcon = 'Operativo';
+            this.colorestado = '#68b64c';
           } else if(valor.I_EST == '0'){
-            this.estcon = 'No Operativo'
-          } else if(valor.I_EST == '2'){
-            this.estcon = 'Parcialmente Operativo'
+            this.valestado = valor.I_EST;
+            this.estcon = 'No Operativo';
+            this.colorestado = '#FF0000';
+          } else if(valor.I_EST == '3'){
+            this.valestado = valor.I_EST;
+            this.estcon = 'Parcialmente Operativo';
+            this.colorestado = '#FFC000';
+          } else if(valor.I_EST == '4'){
+            this.valestado = valor.I_EST;
+            this.estcon = 'Nuevo Proyecto';
+            this.colorestado = '#00EAFF';
           } else {
             this.estcon = 'Sin Datos';
+            this.colorestado = '#ffffff';
           }
           if(valor.Infra_Nombre=='' || valor.Infra_Nombre==null || valor.Infra_Nombre==undefined || valor.Infra_Nombre=='-'){valor.Infra_Nombre='';}
           if(valor.Infra_Tipo=='' || valor.Infra_Tipo==null || valor.Infra_Tipo==undefined || valor.Infra_Tipo=='-'){valor.Infra_Tipo='';}
@@ -116,7 +133,7 @@ export class DetalleIpaComponent implements OnInit {
             this.itcond = valor.B_TRANS;
             this.dispoleipa = valor.V_DISPOSITIVO_LEGAL;
             this.nombreipabuscar = valor.nombredpa;
-            this.nombreipabuscar = this.nombreipabuscar.replace(' ','');
+            this.nombreipabuscar = this.nombreipabuscar.replace(/ /g,'');
             this.urldocumento = 'https://intranet2.fondepes.gob.pe/DOCUMENTO/SIMON/Mapas_Imagenes_Externos/'+this.nombreipabuscar+'/dpa/';
             this.obtenercantidadfotos();
             // this.ionViewDidLoad();
@@ -188,12 +205,14 @@ export class DetalleIpaComponent implements OnInit {
   // }
 
   pie():void {
-    this.pieChartLabels = [ [ 'Download', 'Sales' ], [ 'In', 'Store', 'Sales' ], 'Mail Sales' ];
-    this.pieChartDatasets = [ {
-      data: [ 300, 500, 100 ]
-    } ];
+    this.pieChartLabels = [ this.estcon ];
+    this.pieChartDatasets = [ {data: [ 100 ]} ];
+    this.innerRadius = 200;
+    this.tooltip = false;
     this.pieChartLegend = true;
     this.pieChartPlugins = [];
+    this.stroke = this.colorestado;
+    // document.querySelector(".chartestado").setAttribute('stroke',this.colorestado);
   }
 
 }
