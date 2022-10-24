@@ -39,9 +39,9 @@
           {{ ubiipa }}
         </ion-col>
       </ion-row>
-      <ion-row>
+      <ion-row *ngIf=" estaipa!='4'">
         <ion-col size="4" class="cardtitle">
-          HABILITADO: 
+          CONDICIÓN: 
         </ion-col>      
         <ion-col size="8" class="cardtext">
           <span *ngIf=" ihcond=='1'">
@@ -70,11 +70,13 @@
           <span *ngIf=" estaipa=='4'">
             <ion-icon name="ellipse" color="secondary" class="cardinfoico"></ion-icon>&nbsp;NUEVO PROYECTO
           </span>
-          <span *ngIf=" itcond=='1'">
-            <br><ion-icon name="checkmark-circle" color="success" class="cardinfoico"></ion-icon>&nbsp;TRANSFERIDO
-          </span>
-          <span *ngIf=" itcond=='0'">
-            <br><ion-icon name="close-circle" color="danger" class="cardinfoico"></ion-icon>&nbsp;NO TRANSFERIDO
+          <span *ngIf=" estaipa!='4'">
+            <span *ngIf=" itcond=='1'">
+              <br><ion-icon name="checkmark-circle" color="success" class="cardinfoico"></ion-icon>&nbsp;TRANSFERIDO
+            </span>
+            <span *ngIf=" itcond=='0'">
+              <br><ion-icon name="close-circle" color="danger" class="cardinfoico"></ion-icon>&nbsp;NO TRANSFERIDO
+            </span>
           </span>
           <span *ngIf=" dispoleipa!=''">
             <br>&nbsp;{{ dispoleipa }} 
@@ -84,7 +86,7 @@
     </ion-grid> 
   </ion-card>
 
-  <ion-card color="dark" id="cardfotos" class="cardinfostyle" *ngIf="numfotos>='1'">
+  <ion-card color="light" id="cardfotos" class="cardinfostyle" *ngIf="numfotos>='1'">
     <ion-row class="tableHeader" style="padding-top: 5px; padding-left: 5px; padding-right: 5px;">
       <ion-col class="headertable" size="12">
         INFOGRAFÍA
@@ -100,29 +102,5 @@
       </ion-slides>
     </ion-row>
   </ion-card>
-
-  <ion-card color="medium" id="cardestado" class="cardinfostyle">
-    <ion-row class="tableHeader" style="padding-top: 5px; padding-left: 5px; padding-right: 5px;">
-      <ion-col class="headertable" size="12">
-        ESTADO
-      </ion-col>      
-    </ion-row>
-    <ion-row style="padding-bottom: 5px; padding-left: 36px; padding-right: 36px;" id="divcontainer" class="chart-wrapper"> 
-      <canvas baseChart class="chartestado"
-        [type]="'doughnut'"
-        [datasets]="pieChartDatasets"
-        [labels]="pieChartLabels"
-        [options]="pieChartOptions"
-        [plugins]="pieChartPlugins"
-        [legend]="pieChartLegend"
-        [tooltip]="tooltip"
-        [stroke]="'stroke'"
-        [responsive]="true">
-      </canvas>
-    </ion-row>
-  </ion-card>
-
-  
-
 </ion-content>
 

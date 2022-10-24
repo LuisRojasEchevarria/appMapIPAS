@@ -5,6 +5,7 @@ import { MapaIpasService } from 'src/app/services/mapa-ipas.service';
 // import * as Anychart from 'anychart';
 import { ChartOptions } from 'chart.js';
 
+
 @Component({
   selector: 'app-detalle-ipa',
   templateUrl: './detalle-ipa.component.html',
@@ -30,6 +31,7 @@ export class DetalleIpaComponent implements OnInit {
   numfotos: any;
   imagenes: any[] = [];
   json: any[] = [];
+  audiourl: string;
 
 
   // Pie
@@ -62,29 +64,39 @@ export class DetalleIpaComponent implements OnInit {
           let valor = result[0];
           let habdet = '';
           let tipo_mostrar = '';
-          if(valor.I_HAB_DET == '2'){
-            habdet = 'INTEGRAL (DESCARGA)';
-          } else if(valor.I_HAB_DET == '1'){
-            habdet = 'PARCIAL (DESCARGA/TAREAS PREVIAS)';
-          } else {
-            habdet = 'NINGUNO';
+          if(valor.I_EST != '4'){
+            if(valor.I_HAB_DET == '2'){
+                if(valor.Infra_Id == '56'){
+                    habdet = 'CUENTA CON HABILITACIÓN SANITARIA (MOLUSCOS BIVALVOS)';
+                } else {
+                    habdet = 'CUENTA CON HABILITACIÓN SANITARIA';
+                }
+            } else if(valor.I_HAB_DET == '1'){
+                if(valor.Infra_Id == '56'){
+                    habdet = 'CUENTA CON HABILITACIÓN SANITARIA (MOLUSCOS BIVALVOS)';
+                } else {
+                    habdet = 'CUENTA CON HABILITACIÓN SANITARIA';
+                }
+            } else {
+                habdet = 'NO HABILITADO';
+            }
           }
           if(valor.I_EST == '1'){
             this.valestado = valor.I_EST;
             this.estcon = 'Operativo';
-            this.colorestado = '#68b64c';
+            this.colorestado = '#498135';
           } else if(valor.I_EST == '0'){
             this.valestado = valor.I_EST;
             this.estcon = 'No Operativo';
-            this.colorestado = '#FF0000';
+            this.colorestado = '#f39c12';
           } else if(valor.I_EST == '3'){
             this.valestado = valor.I_EST;
             this.estcon = 'Parcialmente Operativo';
-            this.colorestado = '#FFC000';
+            this.colorestado = '#87c571';
           } else if(valor.I_EST == '4'){
             this.valestado = valor.I_EST;
-            this.estcon = 'Nuevo Proyecto';
-            this.colorestado = '#00EAFF';
+            this.estcon = 'Proyecto Nuevo';
+            this.colorestado = '#00c5eb';
           } else {
             this.estcon = 'Sin Datos';
             this.colorestado = '#ffffff';
@@ -135,9 +147,8 @@ export class DetalleIpaComponent implements OnInit {
             this.nombreipabuscar = valor.nombredpa;
             this.nombreipabuscar = this.nombreipabuscar.replace(/ /g,'');
             this.urldocumento = 'https://intranet2.fondepes.gob.pe/DOCUMENTO/SIMON/Mapas_Imagenes_Externos/'+this.nombreipabuscar+'/dpa/';
+            this.audiourl = 'https://intranet2.fondepes.gob.pe/DOCUMENTO/SIMON/Mapas_Audios_Externos/'+this.nombreipabuscar+'/audio/audio0.mp3';
             this.obtenercantidadfotos();
-            // this.ionViewDidLoad();
-            this.pie();
         }else{
           this.alert('ERROR','','No se encontraron registros');
         }
@@ -171,7 +182,7 @@ export class DetalleIpaComponent implements OnInit {
           }
         }else{
           console.log('ese departamento no tiene imagenes');
-          this.alert('ERROR','','No se encontraron Imágenes');
+          this.alert('AVISO','','No se encontraron imágenes para este Desembarcadero.');
         }
       },
       error => {
@@ -205,14 +216,15 @@ export class DetalleIpaComponent implements OnInit {
   // }
 
   pie():void {
-    this.pieChartLabels = [ this.estcon ];
-    this.pieChartDatasets = [ {data: [ 100 ]} ];
-    this.innerRadius = 200;
-    this.tooltip = false;
-    this.pieChartLegend = true;
-    this.pieChartPlugins = [];
-    this.stroke = this.colorestado;
-    // document.querySelector(".chartestado").setAttribute('stroke',this.colorestado);
+  //  this.pieChartLabels = [ this.estcon ];
+  //  this.pieChartDatasets = [ {data: [ 100 ]} ];
+  //  this.innerRadius = 200;
+  //  this.tooltip = false;
+  //  this.pieChartLegend = true;
+  //  this.pieChartPlugins = [];
+  //  this.stroke = this.colorestado;
+  //  // document.querySelector(".chartestado").setAttribute('stroke','#ffffff');
+  
   }
 
 }
