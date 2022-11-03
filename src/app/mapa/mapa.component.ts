@@ -240,7 +240,6 @@ export class MapaComponent implements OnInit   {
     this.serviceMapaIpas.ipasxfiltro(formData).subscribe(
       result => {
         if(result!='ERROR'){
-          console.log(result);
           this.BorrarMarcador();
           let marckposicion = this.marcadorposicion;
           if(dataSearch.idDepartamento !='TODOS'){

@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
-import * as $ from 'jquery'
+import * as $ from 'jquery';
 import { MapaIpasService } from 'src/app/services/mapa-ipas.service';
-// import * as Anychart from 'anychart';
-import { ChartOptions } from 'chart.js';
-
 
 @Component({
   selector: 'app-detalle-ipa',
@@ -33,19 +30,6 @@ export class DetalleIpaComponent implements OnInit {
   json: any[] = [];
   audiourl: string;
 
-
-  // Pie
-  public pieChartOptions: ChartOptions<'pie'> = {
-    responsive: false,
-  };
-  public pieChartLabels = [];
-  public pieChartDatasets = [];
-  public pieChartLegend = true;
-  public tooltip = false;
-  public pieChartPlugins = [];
-  public innerRadius = 100;
-  public stroke = "";
-
   constructor(
     private alertController: AlertController,
     private serviceMapaIpas: MapaIpasService
@@ -59,7 +43,6 @@ export class DetalleIpaComponent implements OnInit {
     formData.append('id',this.id);
     this.serviceMapaIpas.buscarxid(formData).subscribe(
       result => {
-        console.log(result);
         if(result!='ERROR'){
           let valor = result[0];
           let habdet = '';
@@ -135,20 +118,21 @@ export class DetalleIpaComponent implements OnInit {
             case 'TPZ':
               tipo_mostrar = 'TPZ - TERMINAL PESQUERO ZONAL';
               break;
-            }
-            this.nombreipa = valor.Infra_Nombre;
-            this.tipoipa = tipo_mostrar;
-            this.ubiipa = valor.Departamento +' - '+ valor.Provincia +' - '+ valor.Distrito;
-            this.habiipa = habdet;
-            this.ihcond = valor.B_HAB;
-            this.estaipa = valor.I_EST;
-            this.itcond = valor.B_TRANS;
-            this.dispoleipa = valor.V_DISPOSITIVO_LEGAL;
-            this.nombreipabuscar = valor.nombredpa;
-            this.nombreipabuscar = this.nombreipabuscar.replace(/ /g,'');
-            this.urldocumento = 'https://intranet2.fondepes.gob.pe/DOCUMENTO/SIMON/Mapas_Imagenes_Externos/'+this.nombreipabuscar+'/dpa/';
-            this.audiourl = 'https://intranet2.fondepes.gob.pe/DOCUMENTO/SIMON/Mapas_Audios_Externos/'+this.nombreipabuscar+'/audio/audio0.mp3';
-            this.obtenercantidadfotos();
+          }
+          this.nombreipa = valor.Infra_Nombre;
+          this.tipoipa = tipo_mostrar;
+          this.ubiipa = valor.Departamento +' - '+ valor.Provincia +' - '+ valor.Distrito;
+          this.habiipa = habdet;
+          this.ihcond = valor.B_HAB;
+          this.estaipa = valor.I_EST;
+          this.itcond = valor.B_TRANS;
+          this.dispoleipa = valor.V_DISPOSITIVO_LEGAL;
+          this.nombreipabuscar = valor.nombredpa;
+          this.nombreipabuscar = this.nombreipabuscar.replace(/ /g,'');
+          this.urldocumento = 'https://intranet2.fondepes.gob.pe/DOCUMENTO/SIMON/Mapas_Imagenes_Externos/'+this.nombreipabuscar+'/dpa/';
+          this.audiourl = 'https://intranet2.fondepes.gob.pe/DOCUMENTO/SIMON/Mapas_Audios_Externos/'+this.nombreipabuscar+'/audio/audio0.mp3';
+          this.obtenercantidadfotos();
+          this.obteneraudio();
         }else{
           this.alert('ERROR','','No se encontraron registros');
         }
@@ -191,40 +175,25 @@ export class DetalleIpaComponent implements OnInit {
     ); 
   }
 
-  // ionViewDidLoad(): void {
-  //   // create an instance of a pie chart
-	// var chart = Anychart.pie();
-	// // set the data
-	// chart.data([
-	// 	["Chocolate",12]
-	// ]);
-	// //chart.data.bind().dataLabels("enabled","false");
-	// chart.innerRadius(200);
-	// chart.normal().fill("#82B64C", 0.5);
-	// chart.hovered().fill("#82B64C", 0.5);
-	// chart.selected().fill("#82B64C", 0.7);
-	// chart.labels(false);
-	// chart.selected().labels(false);
-	// chart.hovered().labels(false);
-	// chart.tooltip(false);
-	// // set chart title
-	// chart.title("Top 5 pancake fillings");
-	// // set the container element 
-	// chart.container("container");
-	// // initiate chart display
-	// chart.draw();
-  // }
-
-  pie():void {
-  //  this.pieChartLabels = [ this.estcon ];
-  //  this.pieChartDatasets = [ {data: [ 100 ]} ];
-  //  this.innerRadius = 200;
-  //  this.tooltip = false;
-  //  this.pieChartLegend = true;
-  //  this.pieChartPlugins = [];
-  //  this.stroke = this.colorestado;
-  //  // document.querySelector(".chartestado").setAttribute('stroke','#ffffff');
-  
+  obteneraudio(): void{
+    $("#audioplay").removeAttr("autoplay");
+    $("#audioplay").removeAttr("controls");
+    $("#audioplay").removeAttr("load");
+    $("#cardaudio").html('');
+    document.getElementById("cardaudio").style.display = "none";
+    if(this.audiourl != ''){
+      $('#cardaudio').html('<audio id="audioplay" style="width: 100%;"></audio>');
+      $("#audioplay").html('');
+      $("#audioplay").html(''+
+          '<source src="' +this.audiourl+ '" type="audio/mp3">'+
+      '');
+      document.getElementById("cardaudio").style.display = "block";
+      $("#audioplay").attr("load","load");
+      $("#audioplay").attr("controls","true");
+      $("#audioplay").attr("autoplay","true");
+      $("#audioplay").load();
+      $("#audioplay").play();
+    }
   }
 
 }
