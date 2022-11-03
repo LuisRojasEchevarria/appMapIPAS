@@ -7,11 +7,11 @@ import {
   AbstractControl,
   ValidationErrors
 } from "@angular/forms";
-import { AlertController } from '@ionic/angular';
+import { AlertController , ToastController} from '@ionic/angular';
 import { MapaIpasService } from 'src/app/services/mapa-ipas.service';
 import { REGIONES } from '../json/peru-regiones.json';
 import * as L from 'leaflet';
-import * as $ from 'jquery'
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-mapa',
@@ -35,7 +35,8 @@ export class MapaComponent implements OnInit   {
   constructor(
     private formBuilder: FormBuilder,
     private alertController: AlertController,
-    private serviceMapaIpas: MapaIpasService
+    private serviceMapaIpas: MapaIpasService,
+    private toastController: ToastController
   ) { }
 
   marcadorposicion:any = [];
@@ -49,6 +50,15 @@ export class MapaComponent implements OnInit   {
       nomIpa: [null], 
     }
   );
+
+  async presentToast(position: 'top' | 'middle' | 'bottom', resultmensaje) {
+    const toast = await this.toastController.create({
+      message: resultmensaje,
+      duration: 1500,
+      position: position
+    });
+    await toast.present();
+  }
 
   ngOnInit(): void {
     this.listaDepartamentos();
@@ -251,6 +261,14 @@ export class MapaComponent implements OnInit   {
           for(let i=0; i<marckposicion.length; i++){
             this.map.addLayer(marckposicion[i]);
           }
+          let cantresult = result.length;
+          let mensajito = '';
+          if(cantresult==1){
+            mensajito = '<b>'+ cantresult +' Desembarcadero encontrado.</b>';
+          } else {
+            mensajito = '<b>'+ cantresult +' Desembarcaderos encontrados.</b>';
+          }
+          this.presentToast('middle',mensajito);
         }else{
           console.log('ese departamento no tiene ipas');
           this.alert('ERROR','','No se encontraron registros');
