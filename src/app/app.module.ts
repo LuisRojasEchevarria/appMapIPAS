@@ -11,7 +11,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MapaComponent } from './mapa/mapa.component';
 import { DetalleIpaComponent } from './detalle-ipa/detalle-ipa.component';
-import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -26,8 +25,7 @@ import { NgChartsModule } from 'ng2-charts';
     CommonModule,
     FormsModule,
     HttpClientModule,
-    ReactiveFormsModule,
-    NgChartsModule
+    ReactiveFormsModule
   ],
   providers: [{ 
     provide: RouteReuseStrategy,

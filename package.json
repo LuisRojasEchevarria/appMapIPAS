@@ -1,5 +1,5 @@
 {
-  "name": "appMapIPAS",
+  "name": "DESEMBARCADEROS FONDEPES",
   "version": "0.0.1",
   "author": "Ionic Framework",
   "homepage": "https://ionicframework.com/",
@@ -26,11 +26,9 @@
     "@capacitor/keyboard": "^4.0.1",
     "@capacitor/status-bar": "^4.0.1",
     "@ionic/angular": "^6.1.9",
-    "chart.js": "^3.9.1",
     "ionicons": "^6.0.3",
     "jquery": "^3.6.1",
     "leaflet": "^1.9.2",
-    "ng2-charts": "^4.0.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.2.0",
     "zone.js": "~0.11.4"

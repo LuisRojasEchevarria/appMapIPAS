@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Optional } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -7,7 +7,8 @@ import {
   AbstractControl,
   ValidationErrors
 } from "@angular/forms";
-import { AlertController , ToastController} from '@ionic/angular';
+import { AlertController , ToastController, Platform, IonRouterOutlet} from '@ionic/angular';
+import { App } from '@capacitor/app';
 import { MapaIpasService } from 'src/app/services/mapa-ipas.service';
 import { REGIONES } from '../json/peru-regiones.json';
 import * as L from 'leaflet';
@@ -36,8 +37,14 @@ export class MapaComponent implements OnInit   {
     private formBuilder: FormBuilder,
     private alertController: AlertController,
     private serviceMapaIpas: MapaIpasService,
-    private toastController: ToastController
-  ) { }
+    private toastController: ToastController,
+    private platform: Platform,
+    @Optional() private routerOutlet?: IonRouterOutlet
+  ) { 
+    this.platform.backButton.subscribeWithPriority(5, () => {
+      App.exitApp();
+    });
+  }
 
   marcadorposicion:any = [];
   departamentos: any[] = [];

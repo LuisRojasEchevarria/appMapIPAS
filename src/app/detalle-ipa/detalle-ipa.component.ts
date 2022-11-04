@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController } from '@ionic/angular';
+import { AlertController, Platform } from '@ionic/angular';
 import * as $ from 'jquery';
 import { MapaIpasService } from 'src/app/services/mapa-ipas.service';
 
@@ -32,11 +32,15 @@ export class DetalleIpaComponent implements OnInit {
 
   constructor(
     private alertController: AlertController,
-    private serviceMapaIpas: MapaIpasService
+    private serviceMapaIpas: MapaIpasService,
+    private platform: Platform
   ) {
     let url = window.location.href;
     this.id = +url.split("detalle-ipa/")[1];
-   }
+    this.platform.backButton.subscribeWithPriority(5, () => {
+      $("#btnbackmain").click();
+    });
+  }
 
   ngOnInit() {
     let formData = new FormData;
