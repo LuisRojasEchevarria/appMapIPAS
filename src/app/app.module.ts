@@ -3,6 +3,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { Geolocation } from '@awesome-cordova-plugins/geolocation/ngx';
+import { LocationAccuracy } from '@awesome-cordova-plugins/location-accuracy/ngx';
+import { AndroidPermissions } from '@awesome-cordova-plugins/android-permissions/ngx';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -25,12 +28,14 @@ import { DetalleIpaComponent } from './detalle-ipa/detalle-ipa.component';
     CommonModule,
     FormsModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
-  providers: [{ 
-    provide: RouteReuseStrategy,
-    useClass: IonicRouteStrategy
-  }],
+  providers: [
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    Geolocation,
+    LocationAccuracy,
+    AndroidPermissions
+  ],
   bootstrap: [
     AppComponent
   ],

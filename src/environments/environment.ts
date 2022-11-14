@@ -8,7 +8,7 @@ export const environment = {
   HOST_URL: 'https://intranet2.fondepes.gob.pe/mapaexterno',
   // HOST_URL: 'https://172.20.95.116/mapaexterno',
   // HOST_URL: 'http://localhost/mapaexterno',
-
+  mycordinates: [],
 };
 
 /*

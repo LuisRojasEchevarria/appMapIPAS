@@ -8,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
 export class MapaIpasService {
 
   url = `${environment.HOST_URL}/servicioMapaexterno`;
-  
+
   constructor(private http: HttpClient) { }
 
   listaDepartamentos() {

@@ -2,13 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { AlertController, Platform } from '@ionic/angular';
 import * as $ from 'jquery';
 import { MapaIpasService } from 'src/app/services/mapa-ipas.service';
+import { environment } from 'src/environments/environment';
+import { Geolocation } from '@awesome-cordova-plugins/geolocation/ngx';
 
 @Component({
   selector: 'app-detalle-ipa',
   templateUrl: './detalle-ipa.component.html',
   styleUrls: ['./detalle-ipa.component.scss'],
 })
-export class DetalleIpaComponent implements OnInit {
+
+export class DetalleIpaComponent {
 
   id: any;
   nombre: string;
@@ -27,24 +30,72 @@ export class DetalleIpaComponent implements OnInit {
   valestado: any;
   numfotos: any;
   imagenes: any[] = [];
-  json: any[] = [];
   audiourl: string;
+  lati: any;
+  longi: any;
+  cordina: any[] = [];
+  public getCoordenadas: any[] = [];
 
   constructor(
     private alertController: AlertController,
     private serviceMapaIpas: MapaIpasService,
-    private platform: Platform
+    private platform: Platform,
+    private geolocation: Geolocation
   ) {
-    let url = window.location.href;
-    this.id = +url.split("detalle-ipa/")[1];
     this.platform.backButton.subscribeWithPriority(5, () => {
       $("#btnbackmain").click();
+    });
+    this.platform.ready().then(async () => {
+      this.getGeolocation();
     });
   }
 
   ngOnInit() {
+    
+  }
+
+  getGeolocation(){
+    this.geolocation.getCurrentPosition().then((resp) => {
+      if(resp){
+        // console.log('datos: ',resp)
+        this.getCoordenadas = [
+          resp.coords.latitude,
+          resp.coords.longitude
+        ];
+        environment.mycordinates=this.getCoordenadas;
+        // console.log('Coordenadas: ',environment.mycordinates);
+        this.buscarData();
+      } else {
+        this.getCoordenadas = ['',''];
+        environment.mycordinates=this.getCoordenadas;
+        // console.log('Coor vacías: ',environment.mycordinates);
+        this.buscarData();
+      }
+    }).catch((error) => {
+      this.getCoordenadas = ['',''];
+      environment.mycordinates=this.getCoordenadas;
+      // console.log('Coor sin datos: ',environment.mycordinates);
+      this.buscarData();
+    });
+  }
+
+  buscarData() {
+    let url = window.location.href;
+    this.id = url.split("detalle-ipa/")[1];
+    this.cordina = environment.mycordinates;
+    // console.log('Return ipa: ',this.cordina);
+    // this.alert('Return ipa','',this.cordina);
+    this.lati = this.cordina[0];
+    this.longi = this.cordina[1];
+    if(this.lati=='' || this.lati==null || this.lati==undefined){ this.lati=''}
+    if(this.longi=='' || this.longi==null || this.longi==undefined){ this.longi=''}
+    // console.log('Estas son: ',this.id+' + '+this.lati+' + '+this.longi);
+    // this.alert('AVISO','',this.id+' + '+this.lati+' + '+this.longi);
     let formData = new FormData;
     formData.append('id',this.id);
+    formData.append('latitud',this.lati);
+    formData.append('longitud',this.longi);
+
     this.serviceMapaIpas.buscarxid(formData).subscribe(
       result => {
         if(result!='ERROR'){
@@ -53,17 +104,17 @@ export class DetalleIpaComponent implements OnInit {
           let tipo_mostrar = '';
           if(valor.I_EST != '4'){
             if(valor.I_HAB_DET == '2'){
-                if(valor.Infra_Id == '56'){
-                    habdet = 'CUENTA CON HABILITACIÓN SANITARIA (MOLUSCOS BIVALVOS)';
-                } else {
-                    habdet = 'CUENTA CON HABILITACIÓN SANITARIA';
-                }
+              if(valor.Infra_Id == '56'){
+                habdet = 'CUENTA CON HABILITACIÓN SANITARIA (MOLUSCOS BIVALVOS)';
+              } else {
+                habdet = 'CUENTA CON HABILITACIÓN SANITARIA';
+              }
             } else if(valor.I_HAB_DET == '1'){
-                if(valor.Infra_Id == '56'){
-                    habdet = 'CUENTA CON HABILITACIÓN SANITARIA (MOLUSCOS BIVALVOS)';
-                } else {
-                    habdet = 'CUENTA CON HABILITACIÓN SANITARIA';
-                }
+              if(valor.Infra_Id == '56'){
+                habdet = 'CUENTA CON HABILITACIÓN SANITARIA (MOLUSCOS BIVALVOS)';
+              } else {
+                habdet = 'CUENTA CON HABILITACIÓN SANITARIA';
+              }
             } else {
                 habdet = 'NO HABILITADO';
             }
@@ -144,7 +195,7 @@ export class DetalleIpaComponent implements OnInit {
       error => {
         console.error(error);
       }
-    ); 
+    );
   }
 
   async alert(titulo,subTitulo,mensaje) {
@@ -169,7 +220,7 @@ export class DetalleIpaComponent implements OnInit {
             this.imagenes.push({url: url});
           }
         }else{
-          console.log('ese departamento no tiene imagenes');
+          // console.log('ese departamento no tiene imagenes');
           this.alert('AVISO','','No se encontraron imágenes para este Desembarcadero.');
         }
       },
@@ -189,7 +240,7 @@ export class DetalleIpaComponent implements OnInit {
       $('#cardaudio').html('<audio id="audioplay" style="width: 100%;"></audio>');
       $("#audioplay").html('');
       $("#audioplay").html(''+
-          '<source src="' +this.audiourl+ '" type="audio/mp3">'+
+        '<source src="' +this.audiourl+ '" type="audio/mp3">'+
       '');
       document.getElementById("cardaudio").style.display = "block";
       $("#audioplay").attr("load","load");
