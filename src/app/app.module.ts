@@ -14,12 +14,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MapaComponent } from './mapa/mapa.component';
 import { DetalleIpaComponent } from './detalle-ipa/detalle-ipa.component';
+// import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MapaComponent,
     DetalleIpaComponent
+    // HomeComponent
   ],
   imports: [
     BrowserModule,

@@ -13,6 +13,11 @@ import { MapaIpasService } from 'src/app/services/mapa-ipas.service';
 import { REGIONES } from '../json/peru-regiones.json';
 import * as L from 'leaflet';
 import * as $ from 'jquery';
+// import { Router } from  "@angular/router";
+import { Geolocation } from '@awesome-cordova-plugins/geolocation/ngx';
+import { LocationAccuracy } from '@awesome-cordova-plugins/location-accuracy/ngx';
+import { AndroidPermissions } from '@awesome-cordova-plugins/android-permissions/ngx';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-mapa',
@@ -32,6 +37,10 @@ export class MapaComponent implements OnInit   {
   private baseMaps;
   private layerControl;
   private marcador;  
+  private sub1$:any;
+  private sub2$:any;
+  public getCoordenadas: any[] = [];
+  public flag: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -39,9 +48,22 @@ export class MapaComponent implements OnInit   {
     private serviceMapaIpas: MapaIpasService,
     private toastController: ToastController,
     private platform: Platform,
+    private locationAccuracy: LocationAccuracy,
+    private androidPermissions: AndroidPermissions,
+    private geolocation: Geolocation,
     @Optional() private routerOutlet?: IonRouterOutlet
   ) { 
+    this.platform.ready().then(async () => {
+      // this.validacioInicial();
+      this.sub1$=this.platform.pause.subscribe(() => {        
+        console.log('Application PAUSED');
+      });
+      this.sub2$=this.platform.resume.subscribe(() => {      
+        console.log('Application RESUMED');
+      }); 
+    });
     this.platform.backButton.subscribeWithPriority(5, () => {
+      sessionStorage.removeItem('flagsession');
       App.exitApp();
     });
   }
@@ -69,6 +91,12 @@ export class MapaComponent implements OnInit   {
 
   ngOnInit(): void {
     this.listaDepartamentos();
+  }
+
+  ionViewWillUnload() {
+    this.sub1$.unsubscribe();
+    this.sub2$.unsubscribe();
+    sessionStorage.removeItem('flagsession');
   }
   
   ionViewDidEnter(){
@@ -322,4 +350,100 @@ export class MapaComponent implements OnInit   {
     this.getContent().scrollToTop(500);
   }
 
+  async validacioInicial() {
+    this.flag = sessionStorage.getItem('flagsession');
+    if(this.flag==''){
+      const alertresult = await this.alertController.create({
+        header: 'ATENCIÓN',
+        subHeader: '',
+        message: 'Esta aplicación le solicitará los permisos para utilizar su ubicación y recopilarla para futuros reportes de visitas. Usted puede habilitar o no su GPS, esto no afectará la experiencia de uso del aplicativo.',
+        buttons: [
+          {
+            text: 'Aceptar',
+            handler: () => {
+              sessionStorage.setItem('flagsession', 'true');
+              this.validarPermisos();
+              this.initMap();
+            }
+          }
+        ],
+      });
+      await alertresult.present();
+    }
+  }
+
+  validarPermisos() {
+    this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_FINE_LOCATION).then(
+      result => {
+        if (result.hasPermission) {
+          // If having permission show 'Turn On GPS' dialogue
+          // this.alert('GPS','','GPS location is enabled');
+          return true;
+        } else {
+          // If not having permission ask for permission
+          // this.alert('ERROR','','GPS location is disabled');
+          return false;
+        }
+      },
+      err => { alert(err); }
+    );
+    this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ACCESS_FINE_LOCATION).then(
+      (result) => {
+        if (result.hasPermission) {
+          // call method to turn on GPS
+          this.encenderGPS();
+          return 'GOT_PERMISSION';
+        } else {
+          return 'DENIED_PERMISSION';
+        }
+      },
+      error => {
+        // Show alert if user click on 'No Thanks'
+        // alert('requestPermission Error requesting location permissions ' + error);
+        alert('Error al pedir permisos de localización ' + error);
+      }
+    );
+  }
+
+  encenderGPS() {
+    this.locationAccuracy.canRequest().then((canRequest: boolean) => {
+      if (canRequest) {
+        // the accuracy option will be ignored by iOS
+        this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
+          () => {
+            // this.alert('AVISO','','GPS fue activado');
+            this.getGeolocation();
+            return true;
+          },
+          error => {
+            this.getGeolocation();
+            return false;
+          }
+        );
+      }
+      else { return false; }
+    });
+  }
+
+  getGeolocation() {
+    this.geolocation.getCurrentPosition().then((resp) => {
+      if (resp) {
+        // console.log('datos: ',resp)
+        this.getCoordenadas = [
+          resp.coords.latitude,
+          resp.coords.longitude
+        ];
+        environment.mycordinates = this.getCoordenadas;
+        // console.log('Coordenadas: ',environment.mycordinates);
+      } else {
+        this.getCoordenadas = ['', ''];
+        environment.mycordinates = this.getCoordenadas;
+        // console.log('Coor vacías: ',environment.mycordinates);
+      }
+    }).catch((error) => {
+      this.getCoordenadas = ['', ''];
+      environment.mycordinates = this.getCoordenadas;
+      // console.log('Coor sin datos: ',environment.mycordinates);
+    });
+  }
 }

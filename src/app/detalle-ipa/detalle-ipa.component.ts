@@ -35,49 +35,63 @@ export class DetalleIpaComponent {
   longi: any;
   cordina: any[] = [];
   public getCoordenadas: any[] = [];
+  private sub1$:any;
+  private sub2$:any;
 
   constructor(
     private alertController: AlertController,
     private serviceMapaIpas: MapaIpasService,
-    private platform: Platform,
-    private geolocation: Geolocation
+    private platform: Platform
+    // private geolocation: Geolocation
   ) {
     this.platform.backButton.subscribeWithPriority(5, () => {
       $("#btnbackmain").click();
     });
     this.platform.ready().then(async () => {
-      this.getGeolocation();
+      sessionStorage.setItem('flagsession', 'detalle');     
+      this.buscarData();
+      this.sub1$=this.platform.pause.subscribe(() => {        
+        console.log('Application PAUSED');
+      });
+      this.sub2$=this.platform.resume.subscribe(() => {      
+        console.log('Application RESUMED');
+      }); 
     });
   }
 
   ngOnInit() {
-    
+    sessionStorage.setItem('flagsession', 'true');  
   }
 
-  getGeolocation(){
-    this.geolocation.getCurrentPosition().then((resp) => {
-      if(resp){
-        // console.log('datos: ',resp)
-        this.getCoordenadas = [
-          resp.coords.latitude,
-          resp.coords.longitude
-        ];
-        environment.mycordinates=this.getCoordenadas;
-        // console.log('Coordenadas: ',environment.mycordinates);
-        this.buscarData();
-      } else {
-        this.getCoordenadas = ['',''];
-        environment.mycordinates=this.getCoordenadas;
-        // console.log('Coor vacías: ',environment.mycordinates);
-        this.buscarData();
-      }
-    }).catch((error) => {
-      this.getCoordenadas = ['',''];
-      environment.mycordinates=this.getCoordenadas;
-      // console.log('Coor sin datos: ',environment.mycordinates);
-      this.buscarData();
-    });
+  ionViewWillUnload() {
+    this.sub1$.unsubscribe();
+    this.sub2$.unsubscribe();
   }
+
+  // getGeolocation(){
+  //   this.geolocation.getCurrentPosition().then((resp) => {
+  //     if(resp){
+  //       // console.log('datos: ',resp)
+  //       this.getCoordenadas = [
+  //         resp.coords.latitude,
+  //         resp.coords.longitude
+  //       ];
+  //       environment.mycordinates=this.getCoordenadas;
+  //       // console.log('Coordenadas: ',environment.mycordinates);
+  //       this.buscarData();
+  //     } else {
+  //       this.getCoordenadas = ['',''];
+  //       environment.mycordinates=this.getCoordenadas;
+  //       // console.log('Coor vacías: ',environment.mycordinates);
+  //       this.buscarData();
+  //     }
+  //   }).catch((error) => {
+  //     this.getCoordenadas = ['',''];
+  //     environment.mycordinates=this.getCoordenadas;
+  //     // console.log('Coor sin datos: ',environment.mycordinates);
+  //     this.buscarData();
+  //   });
+  // }
 
   buscarData() {
     let url = window.location.href;

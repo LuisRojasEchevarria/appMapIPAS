@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { MapaComponent } from './mapa/mapa.component';
 import { DetalleIpaComponent } from './detalle-ipa/detalle-ipa.component';
+// import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
   { path: '',
